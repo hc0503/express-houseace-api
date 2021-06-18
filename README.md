@@ -1,11 +1,4 @@
-# nodejs-express-jwt
-
-> Express REST API Boilerplate with JWT Authentication and support for MySQL and PostgreSQL.
-
-- Compilation via [Babel](https://babeljs.io/);
-- Authentication via [JWT](https://jwt.io/);
-- Routes mapping via [express-routes-mapper](https://github.com/aichbauer/express-routes-mapper);
-- Environments for `development`, `testing`, and `production`.
+# Houseace RESTful API endpoints
 
 ## Table of Contents
 
@@ -22,39 +15,24 @@
 - [npm scripts](#npm-scripts)
 - [License]()
 
-## Version notice
-
-This project came a long way since the initial release in 2018. If you used this boilerplate before 2021, you should check a [v0.x.x branch](https://github.com/MarkKhramko/nodejs-express-jwt/tree/v0.x.x) and [v0 tags](https://github.com/MarkKhramko/nodejs-express-jwt/releases/tag/v0.0.0) for the latest changes of v0.
-
-## Install and Use
-
-Start by cloning this repository
+## Installation
 
 ```sh
-# HTTPS
-$ git clone https://github.com/MarkKhramko/nodejs-express-jwt
-```
-
-then use [npm](https://www.npmjs.com/) to
-
-```sh
-# Enter project root
-$ cd nodejs-express-jwt
 # Install dependencies
-$ npm i
+$ yarn install
 # Copy environment file 
 $ cp .env.example .env
 # Fill .env file
 # ...
 # If you want to use PostgreSQL (optional)
-$ npm install -S pg pg-hstore
+$ yarn add pg pg-hstore
 # Start the application (without code watcher)
-$ npm start
+$ yarn start
 #
 # OR
 #
 # start development with nodemon
-$ npm run dev
+$ yarn dev
 ```
 
 MySQL is supported out of the box as it is the default.
@@ -367,4 +345,4 @@ This command:
 
 ## LICENSE
 
-MIT 2018-present. By [Mark Khramko](https://github.com/MarkKhramko)
+MIT 2021. By [Devdreamsolution](https://github.com/devdreamsolution)
