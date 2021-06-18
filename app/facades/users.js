@@ -24,7 +24,7 @@ module.exports = {
 
 // Auth:
 async function _register({ email, password }) {
-	try{
+	try {
 		// Try to create new user.
 		const user = await User.create({
 			email,
@@ -32,7 +32,7 @@ async function _register({ email, password }) {
 		});
 
 		// Issue new access and refresh JWT.
-		const [ tokens ] = await JWT.issueTokens({ user });
+		const [tokens] = await JWT.issueTokens({ user });
 
 		// Prepare output.
 		const result = [
@@ -42,13 +42,13 @@ async function _register({ email, password }) {
 		// Send output.
 		return Promise.resolve(result);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
 
 async function _login({ email, password }) {
-	try{
+	try {
 		// Try to find user.
 		const user = await User.findOneByEmail(email);
 
@@ -68,7 +68,7 @@ async function _login({ email, password }) {
 		}
 
 		// Issue new access and refresh JWT.
-		const [ tokens ] = await JWT.issueTokens({ user });
+		const [tokens] = await JWT.issueTokens({ user });
 
 		// Prepare output.
 		const result = [
@@ -78,7 +78,7 @@ async function _login({ email, password }) {
 		// Send output.
 		return Promise.resolve(result);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
@@ -86,7 +86,7 @@ async function _login({ email, password }) {
 
 // Private:
 async function _getFullName({ userId }) {
-	try{
+	try {
 		// Try to find user.
 		const user = await User.findById(userId);
 
@@ -101,9 +101,9 @@ async function _getFullName({ userId }) {
 		const fullName = user.fullName;
 
 		// Send output.
-		return Promise.resolve([ fullName ]);
+		return Promise.resolve([fullName]);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
