@@ -1,6 +1,4 @@
-// Facades.
-const usersFacade = require('#facades/users');
-
+const User = require('#models/User');
 
 module.exports = {
 	run: _run
@@ -8,12 +6,15 @@ module.exports = {
 
 async function _run() {
 	try {
-		const exampleUserData = {
-			email: "test@test.com",
-			password: "simplepass"
+		const seedData = {
+			roleId: 1,
+			name: "Super Admin",
+			email: "admin@admin.com",
+			password: "password"
 		}
 
-		const user = await usersFacade.register(exampleUserData);
+		// await User.destroy({ truncate: true, cascade: false });
+		const user = await User.create(seedData);
 	}
 	catch (error) {
 		return Promise.reject(error);

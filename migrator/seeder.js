@@ -21,7 +21,7 @@ async function _main() {
 		const DB = await db.service(process.env.NODE_ENV).start();
 
 		await roles.run();
-		// await users.run();
+		await users.run();
 		// Run seeders here...
 
 		console.warn("All seeds inserted");

@@ -6,7 +6,7 @@ module.exports = {
 
 async function _run() {
 	try {
-		const exampleRoleData = [
+		const seedData = [
 			{ name: "Client (Homeowner)" },
 			{ name: "Ace (Contractor)" },
 			{ name: "Ace (Planner)" },
@@ -14,7 +14,7 @@ async function _run() {
 		]
 
 		await Role.destroy({ truncate: true, cascade: false });
-		const roles = await Role.bulkCreate(exampleRoleData);
+		const roles = await Role.bulkCreate(seedData);
 	}
 	catch (error) {
 		return Promise.reject(error);
