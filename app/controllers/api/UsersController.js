@@ -1,4 +1,5 @@
-const User = require('#models/User');
+// Facades:
+const usersFacade = require('#facades/users');
 const jwtFacade = require('#facades/jwt.facade');
 // JWT Service.
 const JWT = require('#services/jwt.service');
@@ -62,15 +63,12 @@ function UsersController() {
 			const { roleId, name, email, password } = req.body;
 
 			// Create new one.
-			const user = await User.create({
+			const [tokens, user] = await usersFacade.register({
 				roleId,
 				name,
 				email,
-				password
+				password,
 			});
-
-			// Issue new access and refresh JWT.
-			const tokens = await jwtFacade.issueTokens({ user });
 
 			// Everything's fine, send response.
 			return createOKResponse({
