@@ -23,10 +23,12 @@ module.exports = {
 }
 
 // Auth:
-async function _register({ email, password }) {
+async function _register({ roleId, name, email, password }) {
 	try {
 		// Try to create new user.
 		const user = await User.create({
+			roleId,
+			name,
 			email,
 			password
 		});

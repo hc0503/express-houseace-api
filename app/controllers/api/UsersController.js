@@ -1,10 +1,9 @@
-// Facades:
-const usersFacade = require('#facades/users');
+const User = require('#models/User');
 const jwtFacade = require('#facades/jwt.facade');
 // JWT Service.
 const JWT = require('#services/jwt.service');
 // Reponse protocols.
-const { 
+const {
 	createOKResponse,
 	createErrorResponse
 } = require('#factories/responses/api');
@@ -22,20 +21,20 @@ function UsersController() {
 		// Default HTTP status code.
 		let statusCode = 500;
 
-		switch(error.name) {
-			case('Unauthorized'):
+		switch (error.name) {
+			case ('Unauthorized'):
 				errorMessage = 'Email or password are incorrect.';
 				statusCode = 406;
 				break;
-			case('ValidationError'):
+			case ('ValidationError'):
 				errorMessage = "Invalid email OR password input";
 				statusCode = 402;
 				break;
-			case('InvalidToken'):
+			case ('InvalidToken'):
 				errorMessage = 'Invalid token or token expired';
 				statusCode = 401;
 				break;
-			case('UserNotFound'):
+			case ('UserNotFound'):
 				errorMessage = "Such user doesn't exist";
 				statusCode = 400;
 				break;
@@ -48,7 +47,7 @@ function UsersController() {
 
 		// Send error response with provided status code.
 		return createErrorResponse({
-			res, 
+			res,
 			error: {
 				message: errorMessage
 			},
@@ -60,30 +59,30 @@ function UsersController() {
 	const _register = async (req, res) => {
 		try {
 			// Extract request input:
-			const email = req.body?.email
-			const password = req.body?.password
-			const firstName = req.body?.firstName
-			const lastName = req.body?.lastName
+			const { roleId, name, email, password } = req.body;
 
 			// Create new one.
-			const [ tokens, user ] = await usersFacade.register({
+			const user = await User.create({
+				roleId,
+				name,
 				email,
-				password,
-				firstName,
-				lastName
+				password
 			});
+
+			// Issue new access and refresh JWT.
+			const tokens = await jwtFacade.issueTokens({ user });
 
 			// Everything's fine, send response.
 			return createOKResponse({
-				res, 
-				content:{
+				res,
+				data: {
 					tokens,
 					// Convert user to JSON, to clear sensitive data (like password)
-					user:user.toJSON()
+					user: user.toJSON()
 				}
 			});
 		}
-		catch(error) {
+		catch (error) {
 			console.error("UsersController._create error: ", error);
 			return _processError(error, req, res);
 		}
@@ -103,19 +102,19 @@ function UsersController() {
 				throw err;
 			}
 
-			const [ tokens, user ] = await usersFacade.login({ email, password });
+			const [tokens, user] = await usersFacade.login({ email, password });
 
 			// Everything's fine, send response.
 			return createOKResponse({
-				res, 
-				content:{
+				res,
+				data: {
 					tokens,
 					// Convert user to JSON, to clear sensitive data (like password).
 					user: user.toJSON()
 				}
 			});
 		}
-		catch(error){
+		catch (error) {
 			console.error("UsersController._login error: ", error);
 			return _processError(error, req, res);
 		}
@@ -131,13 +130,13 @@ function UsersController() {
 			// Everything's fine, send response.
 			return createOKResponse({
 				res,
-				content:{
+				data: {
 					isValid: true,
 					message: "Valid Token"
 				}
 			});
 		}
-		catch(error) {
+		catch (error) {
 			console.error("UsersController._validate error: ", error);
 
 			// In any error case, we send token not valid:
@@ -152,7 +151,7 @@ function UsersController() {
 		try {
 			// Unwrap refresh token.
 			const refreshToken = req?.refreshToken;
-			if (!refreshToken){
+			if (!refreshToken) {
 				const err = new Err("No refreshToken found");
 				err.name = "Unauthorized";
 				err.status = 401;
@@ -160,16 +159,16 @@ function UsersController() {
 			}
 
 			// Everything's ok, issue new one.
-			const [ accessToken ] = await jwtFacade.refreshAccessToken({ refreshToken });
+			const [accessToken] = await jwtFacade.refreshAccessToken({ refreshToken });
 
 			return createOKResponse({
 				res,
-				content:{ 
-					token: accessToken 
+				data: {
+					token: accessToken
 				}
 			});
 		}
-		catch(error) {
+		catch (error) {
 			console.error("UsersController._refresh error: ", error);
 
 			// In any error case, we send token not valid:
@@ -183,7 +182,7 @@ function UsersController() {
 	const _logout = async (req, res) => {
 		try {
 			const refreshToken = req?.refreshToken;
-			if (!refreshToken){
+			if (!refreshToken) {
 				const err = new Err("No refreshToken found");
 				err.name = "Unauthorized";
 				err.status = 401;
@@ -191,19 +190,19 @@ function UsersController() {
 			}
 
 			// Everything's ok, destroy token.
-			const [ status ] = await jwtFacade.disableRefreshToken({ refreshToken });
+			const [status] = await jwtFacade.disableRefreshToken({ refreshToken });
 
 			return createOKResponse({
-				res, 
-				content:{
+				res,
+				data: {
 					status,
 					loggedIn: status === true
 				}
 			});
 		}
-		catch(error) {
+		catch (error) {
 			console.error("UsersController._logout error: ", error);
-			
+
 			// In any error case, we send token not valid:
 			// Create custom error with name InvalidToken.
 			const err = new Error('Invalid Token!');
@@ -220,18 +219,18 @@ function UsersController() {
 			const userId = req?.token?.id;
 
 			// Try to get full name.
-			const [ fullName ] = await usersFacade.getFullName({ userId });
+			const [fullName] = await usersFacade.getFullName({ userId });
 
 			console.log({ fullName });
 
 			return createOKResponse({
-				res, 
-				content:{
+				res,
+				data: {
 					fullName
 				}
 			});
 		}
-		catch(error) {
+		catch (error) {
 			console.error("UsersController._getFullName error: ", error);
 			return _processError(error, req, res);
 		}
