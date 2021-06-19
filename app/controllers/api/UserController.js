@@ -12,9 +12,9 @@ const {
 const { Err } = require('#factories/errors');
 
 
-module.exports = UsersController;
+module.exports = UserController;
 
-function UsersController() {
+function UserController() {
 
 	const _processError = (error, req, res) => {
 		// Default error message.

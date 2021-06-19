@@ -9,9 +9,9 @@ const {
 const { Err } = require('#factories/errors');
 
 
-module.exports = RolesController;
+module.exports = RoleController;
 
-function RolesController() {
+function RoleController() {
 
 	const _processError = (error, req, res) => {
 		// Default error message.
