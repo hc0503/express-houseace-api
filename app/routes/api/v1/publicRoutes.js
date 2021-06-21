@@ -11,6 +11,4 @@ module.exports = {
 	// Role:
 	'GET /roles': 'RoleController.getRoles',
 
-	// Profile:
-	'POST /profiles/update-photo': 'ProfileController.updatePhoto',
 };

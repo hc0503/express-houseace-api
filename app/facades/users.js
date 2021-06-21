@@ -1,28 +1,16 @@
-// Reference models.
 const User = require('#models/User');
-// JWT facade.
 const JWT = require('#facades/jwt.facade');
-// Password hash and compare service.
 const bcrypt = require('#services/bcrypt.service');
-// Custom error.
 const { Err } = require('#factories/errors');
 
-
 module.exports = {
-	// Auth:
 	register: _register,
 	login: _login,
-	// Auth\
-
 	// Private:
-	getFullName: _getFullName
-
-	// Add your methods here...
-
+	getFullName: _getFullName,
 	// Private\
 }
 
-// Auth:
 async function _register({ roleId, name, email, password }) {
 	try {
 		// Try to create new user.
@@ -84,7 +72,6 @@ async function _login({ email, password }) {
 		return Promise.reject(error);
 	}
 }
-// Auth\
 
 // Private:
 async function _getFullName({ userId }) {

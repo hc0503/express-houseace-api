@@ -52,7 +52,8 @@ const User = database.define(
 // Hooks:
 User.beforeValidate((user, options) => {
 	// Hash user's password.
-	user.password = bcryptSevice.hashPassword(user);
+	if (user.password)
+		user.password = bcryptSevice.hashPassword(user);
 })
 // Hooks\
 

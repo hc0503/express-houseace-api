@@ -1,5 +1,6 @@
 const User = require('#models/User');
 const fileFacade = require('#facades/file.facade');
+const formidable = require("formidable");
 
 // Reponse protocols.
 const {
@@ -57,48 +58,28 @@ function ProfileController() {
 	// Protected:
 	const _updatePhoto = async (req, res) => {
 		try {
-			await fileFacade(req, res);
-			if (req.file == undefined) {
-				return createErrorResponse({
-					res,
-					error: {
-						message: "Please upload a file!"
-					},
-					status: 400
-				});
-			}
-			// const user = await Role.findAll();
-
-			return createOKResponse({
-				res,
-				data: {
-
+			const userId = req?.token?.id;
+			const user = await User.findById(userId);
+			const form = new formidable.IncomingForm();
+			form.parse(req, async function (err, fields, files) {
+				try {
+					const imagePath = await fileFacade.fileStore(files.file, user.photo ?? "", "upload/account/profile");
+					await User.update({ photo: imagePath }, { where: { id: userId } });
+					const data = await User.findById(userId);
+					return createOKResponse({
+						res,
+						data: {
+							user: data.toJSON()
+						}
+					})
+				} catch (error) {
+					return _processError(error, req, res)
 				}
 			});
-		}
-		catch (error) {
-			console.error("ProfileController.updatePhoto error: ", error);
-			return _processError(error, req, res);
+		} catch (error) {
+			return _processError(error, req, res)
 		}
 	}
-
-	const fileStore = async (file, oldFilePath) => {
-		const regex = /[^.]*/;
-		const data = fs.readFileSync(file.path);
-		const fileName = file.name.replace(regex, randomstring.generate());
-		const imagePath = `/public/upload/account/profile/${fileName}`;
-		if (!fs.existsSync(`./public/upload/account/profile`)) {
-			fs.mkdirSync(`./public/upload/account/profile`, {
-				recursive: true,
-			});
-		}
-		fs.writeFileSync(`./public${imagePath}`, data);
-		await fs.unlinkSync(file.path);
-		if (fs.existsSync(`./public${oldFilePath}`))
-			await fs.unlinkSync(`./public${oldFilePath}`);
-
-		return imagePath;
-	};
 
 	return {
 		updatePhoto: _updatePhoto,
