@@ -1,21 +1,28 @@
-const util = require("util");
-const multer = require("multer");
-const maxSize = 2 * 1024 * 1024;
+const fs = require("fs");
+const randomstring = require("randomstring");
 
-let storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, __basedir + "/public/upload/account/profile/");
-	},
-	filename: (req, file, cb) => {
-		console.log(file.originalname);
-		cb(null, file.originalname);
-	},
-});
+const _fileStore = async (file, oldFilePath, newFileFolder = "upload") => {
+	try {
+		const regex = /[^.]*/;
+		const data = fs.readFileSync(file.path);
+		const fileName = file.name.replace(regex, randomstring.generate());
+		const filePath = newFileFolder;
+		if (!fs.existsSync(`./public/${filePath}`)) {
+			fs.mkdirSync(`./public/${filePath}`, {
+				recursive: true,
+			});
+		}
+		fs.writeFileSync(`./public/${filePath}/${fileName}`, data);
+		fs.unlinkSync(file.path);
+		if (fs.statSync(`./public/${oldFilePath}`).isFile())
+			fs.unlinkSync(`./public/${oldFilePath}`);
 
-let uploadFile = multer({
-	storage: storage,
-	limits: { fileSize: maxSize },
-}).single("file");
+		return Promise.resolve(`${filePath}/${fileName}`);
+	} catch (error) {
+		return Promise.reject(error);
+	}
+};
 
-let uploadFileMiddleware = util.promisify(uploadFile);
-module.exports = uploadFileMiddleware;
+module.exports = {
+	fileStore: _fileStore
+};
