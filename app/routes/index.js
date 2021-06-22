@@ -16,7 +16,7 @@ const mapRoutes = require('express-routes-mapper');
 
 module.exports = _setUpRoutes;
 
-function _setUpRoutes(options={}) {
+function _setUpRoutes(options = {}) {
 	try {
 		const app = options?.app;
 
@@ -38,9 +38,9 @@ function _setUpRoutes(options={}) {
 		app.use('/', mapRoutes(webRoutes.public, `app/controllers/web/`));
 
 		// Everything's ok, continue.
-		return (req, res, next)=>next();
+		return (req, res, next) => next();
 	}
-	catch(error) {
+	catch (error) {
 		const err = new Error(`Could not setup routes: ${error.message}`);
 		err.name = error?.name;
 		err.code = error?.code;

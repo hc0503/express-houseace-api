@@ -16,21 +16,21 @@ module.exports = {
 	// Add your methods here...
 }
 
-async function _issueAccessToken({ refreshToken, user }){
+async function _issueAccessToken({ refreshToken, user }) {
 	try {
 		let newAccessToken = null;
 
 		// If refresh token was provided:
 		if (!!refreshToken) {
 			const payload = {
-				id:refreshToken?.id,
-				roles:refreshToken?.roles ?? []
+				id: refreshToken?.id,
+				roles: refreshToken?.roles ?? []
 			};
 			newAccessToken = await JWT.issueAccessToken(payload);
 		}
 		// If user was provided:
 		else if (!!user) {
-			const payload = { id:user?.id };
+			const payload = { id: user?.id };
 			newAccessToken = await JWT.issueAccessToken(payload);
 		}
 		else {
@@ -41,7 +41,7 @@ async function _issueAccessToken({ refreshToken, user }){
 		}
 
 		// Check if issue was successful.
-		if (!newAccessToken){
+		if (!newAccessToken) {
 			const err = new Err("Could not issue new access token.");
 			err.status = 401;
 			throw err;
@@ -52,7 +52,7 @@ async function _issueAccessToken({ refreshToken, user }){
 			newAccessToken
 		]);
 	}
-	catch(error) {
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
@@ -63,7 +63,7 @@ async function _issueTokens({ user }) {
 		let payload = {};
 
 		if (!!user) {
-			payload = { id:user?.id };
+			payload = { id: user?.id };
 		}
 		else {
 			const err = new Err('No "user" provided for JWT issue.');
@@ -72,8 +72,8 @@ async function _issueTokens({ user }) {
 			throw err;
 		}
 
-		const [ accessToken ] = await JWT.issueAccessToken(payload);
-		const [ refreshToken ] = await JWT.issueRefreshToken(payload);
+		const [accessToken] = await JWT.issueAccessToken(payload);
+		const [refreshToken] = await JWT.issueRefreshToken(payload);
 
 		// Prepare output,
 		const tokens = {
@@ -85,7 +85,7 @@ async function _issueTokens({ user }) {
 			tokens
 		]);
 	}
-	catch(error) {
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
@@ -93,14 +93,14 @@ async function _issueTokens({ user }) {
 async function _refreshAccessToken({ refreshToken }) {
 	try {
 		// Issue new access token, based on refresh token.
-		const [ accessToken ] = await _issueAccessToken({ refreshToken });
+		const [accessToken] = await _issueAccessToken({ refreshToken });
 
 		// Send output.
 		return Promise.resolve([
 			accessToken
-		]);	
+		]);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
@@ -115,9 +115,9 @@ async function _isRefreshTokenActive({ refreshToken }) {
 		const isActive = foundTokens.length === 0;
 
 		// Send output.
-		return Promise.resolve([ isActive ]);
+		return Promise.resolve([isActive]);
 	}
-	catch(error) {
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
@@ -128,8 +128,8 @@ async function _disableRefreshToken({ refreshToken }) {
 		const { id, token } = refreshToken;
 
 		// Find or create.
-		const [ disabledRefreshToken, created ] = await DisabledRefreshToken.createOrFind({
-			userId:id,
+		const [disabledRefreshToken, created] = await DisabledRefreshToken.createOrFind({
+			userId: id,
 			token
 		});
 
@@ -137,9 +137,9 @@ async function _disableRefreshToken({ refreshToken }) {
 		const createdStatus = created === true || !!disabledRefreshToken;
 
 		// Send output.
-		return Promise.resolve([ createdStatus ]);
+		return Promise.resolve([createdStatus]);
 	}
-	catch(error) {
+	catch (error) {
 		return Promise.reject(error);
 	}
 }

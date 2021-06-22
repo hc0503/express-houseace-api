@@ -19,7 +19,7 @@ async function _main() {
 		console.log("All models migrated.");
 		process.exit(0);
 	}
-	catch(error) {
+	catch (error) {
 		console.error("Migrator error:", error);
 		process.exit(1);
 	}

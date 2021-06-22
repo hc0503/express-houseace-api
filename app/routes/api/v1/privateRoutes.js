@@ -1,3 +1,6 @@
 module.exports = {
-	'GET /users/name': 'UsersController.getFullName',
+	'GET /users/name': 'UserController.getFullName',
+
+	// Profile:
+	'POST /profiles/update-photo': 'ProfileController.updatePhoto',
 };

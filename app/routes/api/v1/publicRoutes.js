@@ -2,9 +2,13 @@ module.exports = {
 	'GET /status': 'APIController.getStatus',
 
 	// User:
-	'POST /auth/register': 'UsersController.register',
-	'POST /auth/login': 'UsersController.login',
-	'POST /auth/validate': 'UsersController.validate',
-	'POST /auth/refresh': 'UsersController.refresh',
-	'POST /auth/logout': 'UsersController.logout',
+	'POST /auth/register': 'UserController.register',
+	'POST /auth/login': 'UserController.login',
+	'POST /auth/validate': 'UserController.validate',
+	'POST /auth/refresh': 'UserController.refresh',
+	'POST /auth/logout': 'UserController.logout',
+
+	// Role:
+	'GET /roles': 'RoleController.getRoles',
+
 };

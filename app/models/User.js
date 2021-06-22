@@ -18,24 +18,26 @@ const User = database.define(
 			type: DataTypes.STRING(255),
 			allowNull: false
 		},
-
-		firstName: {
-			type: DataTypes.STRING(80),
+		name: {
+			type: DataTypes.STRING(255),
 			allowNull: true
 		},
-		lastName: {
-			type: DataTypes.STRING(175),
+		roleId: {
+			type: DataTypes.INTEGER,
+			required: true,
+			allowNull: false
+		},
+		phone: {
+			type: DataTypes.STRING(255),
 			allowNull: true
 		},
-
-		// Example of virtual field:
-		fullName: {
-			type: DataTypes.VIRTUAL,
-			get: function() {
-				const firstName = this.getDataValue("firstName");
-				const lastName = this.getDataValue("lastName");
-				return `${(firstName || "" ).trim()} ${(lastName || "").trim()}`.trim();
-			}
+		address: {
+			type: DataTypes.STRING,
+			allowNull: true
+		},
+		photo: {
+			type: DataTypes.STRING(255),
+			allowNull: true
 		}
 	},
 	{
@@ -50,7 +52,8 @@ const User = database.define(
 // Hooks:
 User.beforeValidate((user, options) => {
 	// Hash user's password.
-	user.password = bcryptSevice.hashPassword(user);
+	if (user.password)
+		user.password = bcryptSevice.hashPassword(user);
 })
 // Hooks\
 
@@ -60,13 +63,17 @@ User.associate = (models) => {
 		foreignKey: "UserId",
 		as: 'disabledRefreshTokens'
 	});
+	models.User.belongsTo(models.Role, {
+		foreignKey: "roleId",
+		as: 'role'
+	});
 }
 
-User.findById = function(id) {
+User.findById = function (id) {
 	return this.findByPk(id);
 }
 
-User.findOneByEmail = function(email) {
+User.findOneByEmail = function (email) {
 	const query = {
 		where: {
 			email
@@ -77,7 +84,7 @@ User.findOneByEmail = function(email) {
 // Static methods\
 
 // Instance methods:
-User.prototype.toJSON = function() {
+User.prototype.toJSON = function () {
 	const values = { ...this.get() };
 	delete values.password;
 	return values;

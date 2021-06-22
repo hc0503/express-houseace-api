@@ -1,38 +1,28 @@
-// Reference models.
 const User = require('#models/User');
-// JWT facade.
 const JWT = require('#facades/jwt.facade');
-// Password hash and compare service.
 const bcrypt = require('#services/bcrypt.service');
-// Custom error.
 const { Err } = require('#factories/errors');
 
-
 module.exports = {
-	// Auth:
 	register: _register,
 	login: _login,
-	// Auth\
-
 	// Private:
-	getFullName: _getFullName
-
-	// Add your methods here...
-
+	getFullName: _getFullName,
 	// Private\
 }
 
-// Auth:
-async function _register({ email, password }) {
-	try{
+async function _register({ roleId, name, email, password }) {
+	try {
 		// Try to create new user.
 		const user = await User.create({
+			roleId,
+			name,
 			email,
 			password
 		});
 
 		// Issue new access and refresh JWT.
-		const [ tokens ] = await JWT.issueTokens({ user });
+		const [tokens] = await JWT.issueTokens({ user });
 
 		// Prepare output.
 		const result = [
@@ -42,13 +32,13 @@ async function _register({ email, password }) {
 		// Send output.
 		return Promise.resolve(result);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
 
 async function _login({ email, password }) {
-	try{
+	try {
 		// Try to find user.
 		const user = await User.findOneByEmail(email);
 
@@ -68,7 +58,7 @@ async function _login({ email, password }) {
 		}
 
 		// Issue new access and refresh JWT.
-		const [ tokens ] = await JWT.issueTokens({ user });
+		const [tokens] = await JWT.issueTokens({ user });
 
 		// Prepare output.
 		const result = [
@@ -78,15 +68,14 @@ async function _login({ email, password }) {
 		// Send output.
 		return Promise.resolve(result);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
-// Auth\
 
 // Private:
 async function _getFullName({ userId }) {
-	try{
+	try {
 		// Try to find user.
 		const user = await User.findById(userId);
 
@@ -101,9 +90,9 @@ async function _getFullName({ userId }) {
 		const fullName = user.fullName;
 
 		// Send output.
-		return Promise.resolve([ fullName ]);
+		return Promise.resolve([fullName]);
 	}
-	catch(error){
+	catch (error) {
 		return Promise.reject(error);
 	}
 }
