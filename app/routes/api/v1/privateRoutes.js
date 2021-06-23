@@ -3,4 +3,5 @@ module.exports = {
 
 	// Profile:
 	'POST /profiles/update-photo': 'ProfileController.updatePhoto',
+	'GET /profiles/me': 'ProfileController.getMe',
 };

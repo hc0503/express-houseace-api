@@ -80,8 +80,24 @@ function ProfileController() {
 			return _processError(error, req, res)
 		}
 	}
+	const _getMe = async (req, res) => {
+		try {
+			const userId = req?.token?.id;
+			const user = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: user.toJSON()
+				}
+			})
+		} catch (error) {
+			return _processError(error, req, res);
+		}
+	}
+	// Protected\
 
 	return {
 		updatePhoto: _updatePhoto,
+		getMe: _getMe,
 	}
 }

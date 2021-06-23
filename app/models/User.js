@@ -87,6 +87,7 @@ User.findOneByEmail = function (email) {
 User.prototype.toJSON = function () {
 	const values = { ...this.get() };
 	delete values.password;
+	values.photo = process.env.BASE_URL + '/' + values.photo;
 	return values;
 }
 // Instance methods\
