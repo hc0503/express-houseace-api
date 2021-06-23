@@ -69,7 +69,7 @@ function ProfileController() {
 					return createOKResponse({
 						res,
 						data: {
-							user: data.toJSON()
+							me: data.toJSON()
 						}
 					})
 				} catch (error) {
@@ -94,10 +94,27 @@ function ProfileController() {
 			return _processError(error, req, res);
 		}
 	}
+	const _updateData = async (req, res) => {
+		try {
+			const userId = req?.token?.id;
+			const {name, phone, address} = req.body;
+			await User.update({ name: name, phone: phone, address: address }, { where: { id: userId } });
+			const user = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: user.toJSON()
+				}
+			})
+		} catch {
+
+		}
+	}
 	// Protected\
 
 	return {
 		updatePhoto: _updatePhoto,
 		getMe: _getMe,
+		updateData: _updateData,
 	}
 }
