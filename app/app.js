@@ -13,6 +13,10 @@ const http = require('http');
 const helmet = require('helmet');
 // Cross-origin requests middleware.
 const cors = require('cors');
+const corsOptions = {
+	origin: ["http://localhost:3000", "http://houseace.co"],
+	optionsSuccessStatus: 200
+}
 
 // Server configuration:
 // ORM.
@@ -32,7 +36,7 @@ global.__basedir = __dirname + '/..';
 
 // Allow cross origin requests
 // (configure to only allow requests from certain origins).
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Set views path.
 app.set('views', __dirname + '/views');
