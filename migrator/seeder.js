@@ -1,5 +1,7 @@
 // Import config from .env file.
 require('dotenv').config();
+const User = require('#models/User');
+const Role = require('#models/Role');
 
 // Data to seed:
 const roles = require('./seeds/roles');
@@ -19,6 +21,10 @@ async function _main() {
 
 		// Make database connection active.
 		const DB = await db.service(process.env.NODE_ENV).start();
+
+		// Truncate
+		// await User.destroy({ truncate: true, cascade: false });
+		// await Role.destroy({ truncate: true, cascade: false });
 
 		await roles.run();
 		await users.run();

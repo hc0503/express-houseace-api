@@ -156,12 +156,29 @@ function ProfileController() {
 			return _processError(error, req, res);
 		}
 	}
+	const _updateType = async (req, res) => {
+		try {
+			const userId = req?.token?.id;
+			const {role} = req.body;
+			await User.update({ roleId: role }, { where: { id: userId } });
+			const user = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: user.toJSON()
+				}
+			});
+		} catch (error) {
+			return _processError(error, req, res);
+		}
+	}
 	// Protected\
 
 	return {
 		updatePhoto: _updatePhoto,
 		getMe: _getMe,
 		updateData: _updateData,
-		updatePassword: _updatePassword
+		updatePassword: _updatePassword,
+		updateType: _updateType,
 	}
 }

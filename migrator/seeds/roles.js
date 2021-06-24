@@ -13,7 +13,6 @@ async function _run() {
 			{ name: "Ace (Supplier)" },
 		]
 
-		await Role.destroy({ truncate: true, cascade: false });
 		const roles = await Role.bulkCreate(seedData);
 	}
 	catch (error) {
