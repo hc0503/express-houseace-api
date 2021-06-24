@@ -4,4 +4,5 @@
 require('#models/Role');
 require('#models/User');
 require('#models/DisabledRefreshToken');
+require('#models/Company');
 // Add your models here ...

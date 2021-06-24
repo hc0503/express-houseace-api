@@ -25,8 +25,9 @@ const Role = database.define(
 // Static methods:
 Role.associate = (models) => {
 	models.Role.hasMany(models.User, {
-		foreignKey: "userId",
-		as: "users"
+		foreignKey: "roleId",
+		as: "users",
+		constraints: false
 	});
 }
 Role.findByName = function (name) {

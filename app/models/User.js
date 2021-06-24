@@ -67,13 +67,14 @@ User.beforeValidate((user, options) => {
 // Static methods:
 User.associate = (models) => {
 	models.User.hasMany(models.DisabledRefreshToken, {
-		foreignKey: "UserId",
+		foreignKey: "userId",
 		as: 'disabledRefreshTokens',
 		constraints: false
 	});
 	models.User.belongsTo(models.Role, {
 		foreignKey: "roleId",
-		as: "roles"
+		as: "role",
+		constraints: false
 	});
 }
 
