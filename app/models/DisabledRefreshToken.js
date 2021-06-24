@@ -21,7 +21,7 @@ const DisabledRefreshToken = database.define(
 			allowNull: false,
 			unique: true
 		},
-		UserId: {
+		userId: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV4,
 			required: true,
@@ -40,8 +40,9 @@ const DisabledRefreshToken = database.define(
 // Static methods:
 DisabledRefreshToken.associate = models => {
 	models.DisabledRefreshToken.belongsTo(models.User, {
-		foreignKey: "UserId",
-		as: 'user'
+		foreignKey: "userId",
+		as: 'user',
+		constraints: false
 	});
 }
 
@@ -52,7 +53,7 @@ DisabledRefreshToken.createOrFind = function ({ token, userId }) {
 
 	const defaults = {
 		token: token,
-		UserId: userId
+		userId: userId
 	};
 
 	const query = {
