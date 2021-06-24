@@ -9,6 +9,12 @@ const bcryptSevice = require('#services/bcrypt.service');
 const User = database.define(
 	'User',
 	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			allowNull: false,
+			primaryKey: true
+		},
 		email: {
 			type: DataTypes.STRING(255),
 			unique: true,
@@ -23,7 +29,8 @@ const User = database.define(
 			allowNull: true
 		},
 		roleId: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 			required: true,
 			allowNull: false
 		},

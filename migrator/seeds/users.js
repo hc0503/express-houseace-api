@@ -1,4 +1,5 @@
 const User = require('#models/User');
+const Role = require('#models/Role');
 
 module.exports = {
 	run: _run
@@ -6,13 +7,14 @@ module.exports = {
 
 async function _run() {
 	try {
+		const role = await Role.findByName('Client (Homeowner)');
 		const seedData = {
-			roleId: 1,
+			roleId: role.id,
 			name: "Super Admin",
 			email: "admin@admin.com",
 			password: "password"
 		}
-		
+
 		const user = await User.create(seedData);
 	}
 	catch (error) {

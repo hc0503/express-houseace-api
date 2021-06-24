@@ -9,6 +9,12 @@ const { Err } = require('#factories/errors');
 const DisabledRefreshToken = database.define(
 	'DisabledRefreshToken',
 	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			allowNull: false,
+			primaryKey: true
+		},
 		token: {
 			type: DataTypes.STRING,
 			required: true,
@@ -16,7 +22,8 @@ const DisabledRefreshToken = database.define(
 			unique: true
 		},
 		UserId: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 			required: true,
 			allowNull: false
 		}
