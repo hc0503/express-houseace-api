@@ -12,8 +12,7 @@ async function _run() {
 			email: "admin@admin.com",
 			password: "password"
 		}
-
-		// await User.destroy({ truncate: true, cascade: false });
+		
 		const user = await User.create(seedData);
 	}
 	catch (error) {

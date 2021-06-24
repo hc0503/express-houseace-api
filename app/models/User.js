@@ -61,11 +61,12 @@ User.beforeValidate((user, options) => {
 User.associate = (models) => {
 	models.User.hasMany(models.DisabledRefreshToken, {
 		foreignKey: "UserId",
-		as: 'disabledRefreshTokens'
+		as: 'disabledRefreshTokens',
+		constraints: false
 	});
 	models.User.belongsTo(models.Role, {
 		foreignKey: "roleId",
-		as: 'role'
+		as: "roles"
 	});
 }
 
@@ -87,6 +88,7 @@ User.findOneByEmail = function (email) {
 User.prototype.toJSON = function () {
 	const values = { ...this.get() };
 	delete values.password;
+	values.photo = process.env.BASE_URL + '/' + values.photo;
 	return values;
 }
 // Instance methods\
