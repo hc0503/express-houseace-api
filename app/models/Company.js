@@ -78,6 +78,7 @@ Company.associate = (models) => {
 Company.prototype.toJSON = function () {
 	const values = { ...this.get() };
 	values.logoImage = process.env.BASE_URL + '/' + values.logoImage;
+	values.heroImage = process.env.BASE_URL + '/' + values.heroImage;
 	return values;
 }
 // Instance methods\

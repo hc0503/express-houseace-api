@@ -9,5 +9,6 @@ module.exports = {
 	'POST /profiles/me/update-type': 'ProfileController.updateType',
 
 	// Company:
-	'POST /companies/me/update-logo': 'CompanyController.updateLogo'
+	'POST /companies/me/update-logo': 'CompanyController.updateLogo',
+	'POST /companies/me/update-hero': 'CompanyController.updateHero',
 };
