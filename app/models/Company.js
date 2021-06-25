@@ -74,4 +74,12 @@ Company.associate = (models) => {
 }
 // Static methods\
 
+// Instance methods:
+Company.prototype.toJSON = function () {
+	const values = { ...this.get() };
+	values.logoImage = process.env.BASE_URL + '/' + values.logoImage;
+	return values;
+}
+// Instance methods\
+
 module.exports = Company;
