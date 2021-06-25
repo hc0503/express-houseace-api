@@ -1,6 +1,7 @@
 // ORM:
 const { DataTypes } = require('sequelize');
 const database = require('#services/db.service');
+const Company = require('#models/Company');
 
 // Password hasher.
 const bcryptSevice = require('#services/bcrypt.service');
@@ -76,16 +77,30 @@ User.associate = (models) => {
 		as: "role",
 		constraints: false
 	});
+	models.User.hasOne(models.Company, {
+		foreignKey: "userId",
+		as: "company",
+		constraints: false
+	});
 }
 
 User.findById = function (id) {
-	return this.findByPk(id);
+	return this.findByPk(id, {
+		include: {
+			model: Company,
+			as: 'company'
+		}
+	});
 }
 
 User.findOneByEmail = function (email) {
 	const query = {
 		where: {
 			email
+		},
+		include: {
+			model: Company,
+			as: 'company'
 		}
 	};
 	return this.findOne(query);

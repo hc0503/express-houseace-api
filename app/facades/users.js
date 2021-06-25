@@ -1,4 +1,5 @@
 const User = require('#models/User');
+const Company = require('#models/Company');
 const JWT = require('#facades/jwt.facade');
 const bcrypt = require('#services/bcrypt.service');
 const { Err } = require('#factories/errors');
@@ -18,7 +19,15 @@ async function _register({ roleId, name, email, password }) {
 			roleId,
 			name,
 			email,
-			password
+			password,
+			company: {
+				logoImage: ""
+			}
+		}, {
+			include: {
+				model: Company,
+				as: 'company'
+			}
 		});
 
 		// Issue new access and refresh JWT.
