@@ -75,10 +75,53 @@ function CompanyController() {
 			console.log(error);
 		}
 	}
+	
+	const _updateData = async (req, res) => {
+		try {
+			const userId = req?.token?.id;
+			const user = await User.findById(userId);
+			const {businessName, phoneNumber, address, licenseNumber, yearFounded, abnNumber} = req.body;
+			const rules = {
+				businessName: ['required'],
+				phoneNumber: ['required'],
+				address: ['required'],
+				licenseNumber: ['required'],
+				yearFounded: ['required'],
+				abnNumber: ['required'],
+			}
+			const validation = new validator(req.body, rules);
+			if (validation.fails()) {
+				return createErrorResponse({
+					res,
+					error: {
+						errors: validation.errors.errors
+					},
+					status: 412
+				});
+			}
+			console.log('Yes');
+			await Company.update({businessName: businessName, phoneNumber: phoneNumber, address: address, licenseNumber: licenseNumber, yearFounded: yearFounded, abnNumber: abnNumber}, {
+				where: {
+					id: user.company.id
+				}
+			})
+			console.log('No');
+			const data = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: data.toJSON()
+				}
+			})
+		} catch {
+
+		}
+	}
 	// Protected\
 
 	return {
 		updateLogo: _updateLogo,
 		updateHero: _updateHero,
+		updateData: _updateData,
 	}
 }
