@@ -1,6 +1,7 @@
 // ORM:
 const { DataTypes } = require('sequelize');
 const database = require('#services/db.service');
+const Company = require('#models/Company');
 
 // Password hasher.
 const bcryptSevice = require('#services/bcrypt.service');
@@ -9,6 +10,12 @@ const bcryptSevice = require('#services/bcrypt.service');
 const User = database.define(
 	'User',
 	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			allowNull: false,
+			primaryKey: true
+		},
 		email: {
 			type: DataTypes.STRING(255),
 			unique: true,
@@ -23,7 +30,8 @@ const User = database.define(
 			allowNull: true
 		},
 		roleId: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 			required: true,
 			allowNull: false
 		},
@@ -60,24 +68,39 @@ User.beforeValidate((user, options) => {
 // Static methods:
 User.associate = (models) => {
 	models.User.hasMany(models.DisabledRefreshToken, {
-		foreignKey: "UserId",
+		foreignKey: "userId",
 		as: 'disabledRefreshTokens',
 		constraints: false
 	});
 	models.User.belongsTo(models.Role, {
 		foreignKey: "roleId",
-		as: "roles"
+		as: "role",
+		constraints: false
+	});
+	models.User.hasOne(models.Company, {
+		foreignKey: "userId",
+		as: "company",
+		constraints: false
 	});
 }
 
 User.findById = function (id) {
-	return this.findByPk(id);
+	return this.findByPk(id, {
+		include: {
+			model: Company,
+			as: 'company'
+		}
+	});
 }
 
 User.findOneByEmail = function (email) {
 	const query = {
 		where: {
 			email
+		},
+		include: {
+			model: Company,
+			as: 'company'
 		}
 	};
 	return this.findOne(query);

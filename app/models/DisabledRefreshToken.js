@@ -9,14 +9,21 @@ const { Err } = require('#factories/errors');
 const DisabledRefreshToken = database.define(
 	'DisabledRefreshToken',
 	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			allowNull: false,
+			primaryKey: true
+		},
 		token: {
 			type: DataTypes.STRING,
 			required: true,
 			allowNull: false,
 			unique: true
 		},
-		UserId: {
-			type: DataTypes.INTEGER,
+		userId: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 			required: true,
 			allowNull: false
 		}
@@ -33,8 +40,9 @@ const DisabledRefreshToken = database.define(
 // Static methods:
 DisabledRefreshToken.associate = models => {
 	models.DisabledRefreshToken.belongsTo(models.User, {
-		foreignKey: "UserId",
-		as: 'user'
+		foreignKey: "userId",
+		as: 'user',
+		constraints: false
 	});
 }
 
@@ -45,7 +53,7 @@ DisabledRefreshToken.createOrFind = function ({ token, userId }) {
 
 	const defaults = {
 		token: token,
-		UserId: userId
+		userId: userId
 	};
 
 	const query = {

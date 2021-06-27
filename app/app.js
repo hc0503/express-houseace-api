@@ -32,7 +32,9 @@ global.__basedir = __dirname + '/..';
 
 // Allow cross origin requests
 // (configure to only allow requests from certain origins).
-app.use(cors());
+app.use(cors({
+	origin: ["http://localhost:3000", process.env.CORS_URL]
+}));
 
 // Set views path.
 app.set('views', __dirname + '/views');

@@ -4,6 +4,12 @@ const database = require('#services/db.service');
 const Role = database.define(
 	'Role',
 	{
+		id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			allowNull: false,
+			primaryKey: true
+		},
 		name: {
 			type: DataTypes.STRING(255),
 			allowNull: true,
@@ -19,9 +25,18 @@ const Role = database.define(
 // Static methods:
 Role.associate = (models) => {
 	models.Role.hasMany(models.User, {
-		foreignKey: "userId",
-		as: "users"
+		foreignKey: "roleId",
+		as: "users",
+		constraints: false
 	});
+}
+Role.findByName = function (name) {
+	const query = {
+		where: {
+			name
+		}
+	};
+	return this.findOne(query);
 }
 // Static methods\
 
