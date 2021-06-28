@@ -120,7 +120,6 @@ function CompanyController() {
 			const userId = req?.token?.id;
 			const user = await User.findById(userId);
 			const {services} = req.body;
-			console.log(services);
 			await Company.update({services: services}, {
 				where: {
 					id: user.company.id
