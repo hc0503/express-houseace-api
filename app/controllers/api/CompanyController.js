@@ -104,7 +104,6 @@ function CompanyController() {
 					id: user.company.id
 				}
 			})
-			console.log('No');
 			const data = await User.findById(userId);
 			return createOKResponse({
 				res,
@@ -112,7 +111,30 @@ function CompanyController() {
 					me: data.toJSON()
 				}
 			})
-		} catch {
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const _updateServices = async (req, res) => {
+		try {
+			const userId = req?.token?.id;
+			const user = await User.findById(userId);
+			const {services} = req.body;
+			console.log(services);
+			await Company.update({services: services}, {
+				where: {
+					id: user.company.id
+				}
+			})
+			const data = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: data.toJSON()
+				}
+			})
+
+		} catch (error) {
 
 		}
 	}
@@ -122,5 +144,6 @@ function CompanyController() {
 		updateLogo: _updateLogo,
 		updateHero: _updateHero,
 		updateData: _updateData,
+		updateServices: _updateServices,
 	}
 }
