@@ -16,7 +16,18 @@ async function _run() {
 			email: "admin@admin.com",
 			password: "password",
 			company: {
-				logoImage: ""
+				logoImage: "",
+				heroImage: "",
+				businessName: "Interlor Archltect",
+				phoneNumber: "(03) 5348 5891",
+				address: "98 Garden Place, FENTONS CREEK, Victoria-3518",
+				licenseNumber: "5348 5891",
+				yearFounded: "2012",
+				abnNumber: "5348 5891",
+				services: [
+					{name: "Bathroom"},
+					{name: "Kitchen"},
+				]
 			}
 		}, {
 			include: {
