@@ -80,14 +80,14 @@ function CompanyController() {
 		try {
 			const userId = req?.token?.id;
 			const user = await User.findById(userId);
-			const {businessName, phoneNumber, address, licenseNumber, yearFounded, abnNumber} = req.body;
+			const {business_name, phone_number, address, license_number, year_founded, abn_number} = req.body;
 			const rules = {
-				businessName: ['required'],
-				phoneNumber: ['required'],
+				business_name: ['required'],
+				phone_number: ['required'],
 				address: ['required'],
-				licenseNumber: ['required'],
-				yearFounded: ['required'],
-				abnNumber: ['required'],
+				license_number: ['required'],
+				year_founded: ['required'],
+				abn_number: ['required'],
 			}
 			const validation = new validator(req.body, rules);
 			if (validation.fails()) {
@@ -99,13 +99,11 @@ function CompanyController() {
 					status: 412
 				});
 			}
-			console.log('Yes');
-			await Company.update({businessName: businessName, phoneNumber: phoneNumber, address: address, licenseNumber: licenseNumber, yearFounded: yearFounded, abnNumber: abnNumber}, {
+			await Company.update({businessName: business_name, phoneNumber: phone_number, address: address, licenseNumber: license_number, yearFounded: year_founded, abnNumber: abn_number}, {
 				where: {
 					id: user.company.id
 				}
 			})
-			console.log('No');
 			const data = await User.findById(userId);
 			return createOKResponse({
 				res,
@@ -113,7 +111,29 @@ function CompanyController() {
 					me: data.toJSON()
 				}
 			})
-		} catch {
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	const _updateServices = async (req, res) => {
+		try {
+			const userId = req?.token?.id;
+			const user = await User.findById(userId);
+			const {services} = req.body;
+			await Company.update({services: services}, {
+				where: {
+					id: user.company.id
+				}
+			})
+			const data = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: data.toJSON()
+				}
+			})
+
+		} catch (error) {
 
 		}
 	}
@@ -123,5 +143,6 @@ function CompanyController() {
 		updateLogo: _updateLogo,
 		updateHero: _updateHero,
 		updateData: _updateData,
+		updateServices: _updateServices,
 	}
 }

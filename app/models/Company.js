@@ -48,6 +48,10 @@ const Company = database.define(
 		abnNumber: {
 			type: DataTypes.STRING(50),
 			allowNull: true
+		},
+		services: {
+			type: DataTypes.JSON,
+			allowNull: true
 		}
 	},
 	{
