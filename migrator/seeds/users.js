@@ -16,8 +16,6 @@ async function _run() {
 			email: "admin@admin.com",
 			password: "password",
 			company: {
-				logoImage: "",
-				heroImage: "",
 				businessName: "Interlor Archltect",
 				phoneNumber: "(03) 5348 5891",
 				address: "98 Garden Place, FENTONS CREEK, Victoria-3518",

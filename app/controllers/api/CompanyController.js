@@ -23,7 +23,8 @@ function CompanyController() {
 			const form = new formidable.IncomingForm();
 			form.parse(req, async function (err, fields, files) {
 				try {
-					const logoPath = await fileFacade.fileStore(files.file, user.company.logoImage ?? "", "upload/account/company");
+					const logoPath = await fileFacade.fileStore(files.file, "upload/account/company");
+					await fileFacade.fileDelete(user.company.logoImage ?? "FileNotExist");
 					await Company.update({
 						logoImage: logoPath
 					}, {
@@ -53,7 +54,8 @@ function CompanyController() {
 			const form = new formidable.IncomingForm();
 			form.parse(req, async function (err, fields, files) {
 				try {
-					const heroPath = await fileFacade.fileStore(files.file, user.company.heroImage ?? "", "upload/account/company");
+					const heroPath = await fileFacade.fileStore(files.file, "upload/account/company");
+					await fileFacade.fileDelete(user.company.heroImage ?? "FileNotExist");
 					await Company.update({
 						heroImage: heroPath
 					}, {

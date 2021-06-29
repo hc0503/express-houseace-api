@@ -65,7 +65,8 @@ function ProfileController() {
 			const form = new formidable.IncomingForm();
 			form.parse(req, async function (err, fields, files) {
 				try {
-					const imagePath = await fileFacade.fileStore(files.file, user.photo ?? "", "upload/account/profile");
+					const imagePath = await fileFacade.fileStore(files.file, "upload/account/profile");
+					await fileFacade.fileDelete(user.photo ?? "FileNotExist");
 					await User.update({ photo: imagePath }, { where: { id: userId } });
 					const data = await User.findById(userId);
 					return createOKResponse({

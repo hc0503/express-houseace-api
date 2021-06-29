@@ -22,8 +22,9 @@ const _fileStore = async (file, newFileFolder = "upload") => {
 
 const _fileDelete = async (filePath) => {
 	try {
-		if (fs.statSync(`./public/${filePath}`).isFile())
+		if (fs.existsSync(`./public/${filePath}`))
 			fs.unlinkSync(`./public/${filePath}`);
+		return Promise.resolve(true);
 	} catch (error) {
 		return Promise.reject(error);
 	}
