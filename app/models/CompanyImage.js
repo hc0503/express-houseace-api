@@ -38,5 +38,9 @@ CompanyImage.prototype.toJSON = function () {
 	values.image = process.env.BASE_URL + '/' + values.image;
 	return values;
 }
+CompanyImage.findById = function (id) {
+	return this.findByPk(id);
+}
+
 
 module.exports = CompanyImage;

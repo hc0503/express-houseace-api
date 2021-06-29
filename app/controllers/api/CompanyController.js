@@ -145,7 +145,7 @@ function CompanyController() {
 			const form =  new formidable.IncomingForm();
 			form.parse(req, async function (err, fields, files) {
 				try {
-					const imagePath = await fileFacade.fileStore(files.file, user.company.companyImages.image ?? "", "upload/account/company/images");
+					const imagePath = await fileFacade.fileStore(files.file, "upload/account/company/images");
 					await CompanyImage.create({
 						companyId: user.company.id,
 						image: imagePath
@@ -165,6 +165,28 @@ function CompanyController() {
 
 		}
 	}
+	const _deleteImage = async (req, res) => {
+		try {
+			const id = req.params?.id;
+			const userId = req.token?.id;
+			const companyImage = await CompanyImage.findById(id);
+			await fileFacade.fileDelete(companyImage.image);
+			await CompanyImage.destroy({
+				where: {
+					id: id
+				}
+			})
+			const user = await User.findById(userId);
+			return createOKResponse({
+				res,
+				data: {
+					me: user.toJSON()
+				}
+			})
+		} catch (error) {
+
+		}
+	}
 	// Protected\
 
 	return {
@@ -173,5 +195,6 @@ function CompanyController() {
 		updateData: _updateData,
 		updateServices: _updateServices,
 		addImage: _addImage,
+		deleteImage: _deleteImage,
 	}
 }
