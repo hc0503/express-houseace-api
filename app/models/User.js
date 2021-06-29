@@ -2,10 +2,9 @@
 const { DataTypes } = require('sequelize');
 const database = require('#services/db.service');
 const Company = require('#models/Company');
+const CompanyImage = require('#models/CompanyImage');
 
-// Password hasher.
 const bcryptSevice = require('#services/bcrypt.service');
-
 
 const User = database.define(
 	'User',
@@ -88,8 +87,12 @@ User.findById = function (id) {
 	return this.findByPk(id, {
 		include: {
 			model: Company,
-			as: 'company'
-		}
+			as: 'company',
+			include: {
+				model: CompanyImage,
+				as: "companyImages"
+			}
+		},
 	});
 }
 
@@ -100,8 +103,12 @@ User.findOneByEmail = function (email) {
 		},
 		include: {
 			model: Company,
-			as: 'company'
-		}
+			as: 'company',
+			include: {
+				model: CompanyImage,
+				as: "companyImages"
+			}
+		},
 	};
 	return this.findOne(query);
 }

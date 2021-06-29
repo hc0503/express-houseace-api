@@ -1,5 +1,6 @@
 const Company = require('#models/Company');
 const User = require('#models/User');
+const CompanyImage = require('#models/CompanyImage');
 const fileFacade = require('#facades/file.facade');
 const formidable = require("formidable");
 const validator = require('validatorjs');
@@ -137,6 +138,33 @@ function CompanyController() {
 
 		}
 	}
+	const _addImage = async (req, res) => {
+		try {
+			const userId = req.token?.id;
+			const user = await User.findById(userId);
+			const form =  new formidable.IncomingForm();
+			form.parse(req, async function (err, fields, files) {
+				try {
+					const imagePath = await fileFacade.fileStore(files.file, user.company.companyImages.image ?? "", "upload/account/company/images");
+					await CompanyImage.create({
+						companyId: user.company.id,
+						image: imagePath
+					});
+					const data = await User.findById(userId);
+					return createOKResponse({
+						res,
+						data: {
+							me: data.toJSON()
+						}
+					});
+				} catch (error) {
+
+				}
+			})
+		} catch (error) {
+
+		}
+	}
 	// Protected\
 
 	return {
@@ -144,5 +172,6 @@ function CompanyController() {
 		updateHero: _updateHero,
 		updateData: _updateData,
 		updateServices: _updateServices,
+		addImage: _addImage,
 	}
 }

@@ -13,4 +13,5 @@ module.exports = {
 	'POST /companies/me/update-hero': 'CompanyController.updateHero',
 	'POST /companies/me/update-data': 'CompanyController.updateData',
 	'POST /companies/me/update-services': 'CompanyController.updateServices',
+	'POST /companies/me/image': 'CompanyController.addImage',
 };

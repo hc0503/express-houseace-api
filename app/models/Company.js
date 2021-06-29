@@ -1,6 +1,7 @@
 // ORM:
 const { DataTypes } = require('sequelize');
 const database = require('#services/db.service');
+const CompanyImage = require('#models/CompanyImage');
 
 const Company = database.define(
 	'Company',
@@ -55,36 +56,37 @@ const Company = database.define(
 		}
 	},
 	{
-		// Enable automatic 'createdAt' and 'updatedAt' fields.
 		timestamps: true,
-		// Only allow 'soft delete'
-		// (set of 'deletedAt' field, insted of the real deletion).
-		paranoid: false
 	}
 );
 
 Company.findById = function (id) {
-	return this.findByPk(id);
+	return this.findByPk(id, {
+		include: {
+			model: CompanyImage,
+			as: 'companyImages'
+		}
+	});
 }
 
-// Static methods:
-// Static methods:
 Company.associate = (models) => {
 	models.Company.belongsTo(models.User, {
 		foreignKey: "userId",
 		as: "user",
 		constraints: false
 	});
+	models.Company.hasMany(models.CompanyImage, {
+		foreignKey: "companyId",
+		as: 'companyImages',
+		constraints: false
+	});
 }
-// Static methods\
 
-// Instance methods:
 Company.prototype.toJSON = function () {
 	const values = { ...this.get() };
 	values.logoImage = process.env.BASE_URL + '/' + values.logoImage;
 	values.heroImage = process.env.BASE_URL + '/' + values.heroImage;
 	return values;
 }
-// Instance methods\
 
 module.exports = Company;
