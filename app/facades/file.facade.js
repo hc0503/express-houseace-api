@@ -1,7 +1,7 @@
 const fs = require("fs");
 const randomstring = require("randomstring");
 
-const _fileStore = async (file, oldFilePath, newFileFolder = "upload") => {
+const _fileStore = async (file, newFileFolder = "upload") => {
 	try {
 		const regex = /[^.]*/;
 		const data = fs.readFileSync(file.path);
@@ -9,20 +9,27 @@ const _fileStore = async (file, oldFilePath, newFileFolder = "upload") => {
 		const filePath = newFileFolder;
 		if (!fs.existsSync(`./public/${filePath}`)) {
 			fs.mkdirSync(`./public/${filePath}`, {
-				recursive: true,
-			});
+				recursive: true
+			})
 		}
 		fs.writeFileSync(`./public/${filePath}/${fileName}`, data);
 		fs.unlinkSync(file.path);
-		if (fs.statSync(`./public/${oldFilePath}`).isFile())
-			fs.unlinkSync(`./public/${oldFilePath}`);
-
 		return Promise.resolve(`${filePath}/${fileName}`);
 	} catch (error) {
 		return Promise.reject(error);
 	}
-};
+}
+
+const _fileDelete = async (filePath) => {
+	try {
+		if (fs.statSync(`./public/${filePath}`).isFile())
+			fs.unlinkSync(`./public/${filePath}`);
+	} catch (error) {
+		return Promise.reject(error);
+	}
+}
 
 module.exports = {
-	fileStore: _fileStore
+	fileStore: _fileStore,
+	fileDelete: _fileDelete,
 };
