@@ -12,7 +12,9 @@ async function _run() {
 
 		const user = await User.create({
 			roleId: role.id,
-			name: "Super Admin",
+			name: "Madeline T Heagney",
+			phone: "(03) 5348 5891",
+			address: "98 Garden Place, FENTONS CREEK, Victoria-3518",
 			email: "admin@admin.com",
 			password: "password",
 			company: {
