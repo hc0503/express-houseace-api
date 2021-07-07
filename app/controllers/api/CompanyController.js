@@ -38,13 +38,19 @@ function CompanyController() {
 						data: {
 							me: data.toJSON()
 						}
-					})
+					});
 				} catch (error) {
-					console.log(error); 
+					return createErrorResponse({
+						res,
+						msg: error.message
+					});
 				}
 			});
 		} catch (error) {
-			console.log(error); 
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _updateHero = async (req, res) => {
@@ -71,14 +77,19 @@ function CompanyController() {
 						}
 					})
 				} catch (error) {
-					console.log(error);
+					return createErrorResponse({
+						res,
+						msg: error.message
+					});
 				}
 			})
 		} catch (error) {
-			console.log(error);
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
-	
 	const _updateData = async (req, res) => {
 		try {
 			const userId = req?.token?.id;
@@ -96,9 +107,7 @@ function CompanyController() {
 			if (validation.fails()) {
 				return createErrorResponse({
 					res,
-					error: {
-						errors: validation.errors.errors
-					},
+					errors: validation.errors.errors,
 					status: 412
 				});
 			}
@@ -115,7 +124,10 @@ function CompanyController() {
 				}
 			})
 		} catch (error) {
-			console.log(error);
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _updateServices = async (req, res) => {
@@ -137,7 +149,10 @@ function CompanyController() {
 			})
 
 		} catch (error) {
-
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _addImage = async (req, res) => {
@@ -160,11 +175,17 @@ function CompanyController() {
 						}
 					});
 				} catch (error) {
-
+					return createErrorResponse({
+						res,
+						msg: error.message
+					});
 				}
 			})
 		} catch (error) {
-
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _deleteImage = async (req, res) => {
@@ -186,7 +207,10 @@ function CompanyController() {
 				}
 			})
 		} catch (error) {
-
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	// Protected\
