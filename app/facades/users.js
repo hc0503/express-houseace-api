@@ -62,7 +62,7 @@ async function _login({ email, password }) {
 			// Validation failed,
 			// throw custom error with name Unauthorized:
 			const err = new Err(`Validation failed.`);
-			err.name = "ValidationError";
+			err.name = "Unauthorized";
 			throw err;
 		}
 
