@@ -16,47 +16,6 @@ const { Err } = require('#factories/errors');
 module.exports = ProfileController;
 
 function ProfileController() {
-
-	const _processError = (error, req, res) => {
-		// Default error message.
-		let errorMessage = error?.message ?? 'Internal server error';
-		// Default HTTP status code.
-		let statusCode = 500;
-
-		switch (error.name) {
-			case ('Unauthorized'):
-				errorMessage = 'Email or password are incorrect.';
-				statusCode = 406;
-				break;
-			case ('ValidationError'):
-				errorMessage = "Invalid email OR password input";
-				statusCode = 402;
-				break;
-			case ('InvalidToken'):
-				errorMessage = 'Invalid token or token expired';
-				statusCode = 401;
-				break;
-			case ('UserNotFound'):
-				errorMessage = "Such user doesn't exist";
-				statusCode = 400;
-				break;
-
-			// Perform your custom processing here...
-
-			default:
-				break;
-		}
-
-		// Send error response with provided status code.
-		return createErrorResponse({
-			res,
-			error: {
-				message: errorMessage
-			},
-			status: statusCode
-		});
-	}
-
 	// Protected:
 	const _updatePhoto = async (req, res) => {
 		try {
@@ -94,7 +53,10 @@ function ProfileController() {
 				}
 			})
 		} catch (error) {
-			return _processError(error, req, res);
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _updateData = async (req, res) => {
@@ -109,8 +71,11 @@ function ProfileController() {
 					me: user.toJSON()
 				}
 			})
-		} catch {
-
+		} catch (error) {
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _updatePassword = async (req, res) => {
@@ -126,9 +91,7 @@ function ProfileController() {
 			if (validation.fails()) {
 				return createErrorResponse({
 					res,
-					error: {
-						errors: validation.errors.errors
-					},
+					errors: validation.errors.errors,
 					status: 412
 				});
 			}
@@ -136,12 +99,10 @@ function ProfileController() {
 			if (!bcrypt.comparePasswords(current_password, user.password)) {
 				return createErrorResponse({
 					res,
-					error: {
-						errors: {
-							current_password: [
-								"The current password is incorrect."
-							]
-						}
+					errors: {
+						current_password: [
+							"The current password is incorrect."
+						]
 					},
 					status: 412
 				});
@@ -154,7 +115,10 @@ function ProfileController() {
 				}
 			})
 		} catch (error) {
-			return _processError(error, req, res);
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	const _updateType = async (req, res) => {
@@ -170,7 +134,10 @@ function ProfileController() {
 				}
 			});
 		} catch (error) {
-			return _processError(error, req, res);
+			return createErrorResponse({
+				res,
+				msg: error.message
+			});
 		}
 	}
 	// Protected\

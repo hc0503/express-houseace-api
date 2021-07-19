@@ -57,8 +57,8 @@ module.exports = async (req, res, next) => {
 
 		return createErrorResponse({
 			res, 
-			error,
-			status: error?.statusCode ?? 401
+			status: error?.statusCode ?? 401,
+			msg: error.message
 		});
 	}
 }
