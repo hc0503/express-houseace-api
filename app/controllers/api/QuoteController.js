@@ -67,7 +67,7 @@ function QuoteController() {
 			});
 		}
 	}
-	const _postCreate = async (req, res) => {
+	const _postUpdate = async (req, res) => {
 		try {
 			const userId = req?.token?.id;
 			const user = await User.findById(userId);
@@ -101,10 +101,10 @@ function QuoteController() {
 			});
 		}
 	}
-	const _postCalculate = async (req, res) {
+	const _postCalculate = async (req, res) => {
 
 	}
-	const _postDelete = async (req, res) {
+	const _postDelete = async (req, res) => {
 
 	}
 	// Protected\
