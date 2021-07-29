@@ -15,4 +15,12 @@ module.exports = {
 	'POST /companies/me/update-services': 'CompanyController.updateServices',
 	'POST /companies/me/image': 'CompanyController.addImage',
 	'POST /companies/me/image/:id': 'CompanyController.deleteImage',
+
+	// Quote:
+	'GET /projects/list': 'ProjectController.getList',
+	'GET /quotes/list': 'QuoteController.getList',
+	'POST /quotes/create': 'QuoteController.postCreate',
+	'POST /quotes/update/:id': 'QuoteController.postUpdate',
+	'POST /quotes/calc': 'QuoteController.postCalculate',
+	'POST /quotes/delete/:id': 'QuoteController.postDelete',
 };
