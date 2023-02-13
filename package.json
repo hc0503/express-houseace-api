@@ -34,7 +34,7 @@
 		"@babel/preset-env": "^7.12.11",
 		"babel-plugin-module-resolver": "^4.1.0",
 		"cross-env": "^7.0.3",
-		"nodemon": "^2.0.7"
+		"nodemon": "^2.0.20"
 	},
 	"description": "Express RESTful API endpoints for Houseace",
 	"repository": {
